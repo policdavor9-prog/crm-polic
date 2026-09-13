@@ -368,6 +368,34 @@ tbody tr.sumrow{background:rgba(10,132,255,.10)!important}
 tbody tr.sumrow td{border-top:1.5px solid var(--border)}
 tbody tr.sumrow:hover{background:rgba(10,132,255,.14)!important}
 
+/* --- Obrazac terenskog dodatka (putni troškovi) --- */
+.tdoc{background:#fff;color:#15171c;border:1px solid var(--line);border-radius:var(--r-s);
+  padding:24px 26px;margin-bottom:16px;break-inside:auto}
+html[data-theme="dark"] .tdoc{background:#f6f7f9;border-color:rgba(255,255,255,.14)}
+.tdoc .th{display:flex;gap:14px;align-items:flex-start;margin-bottom:6px}
+.tdoc .th img{width:54px;height:54px;object-fit:contain;border-radius:8px;background:#fff}
+.tdoc .th b{font-size:14.5px;font-weight:700;display:block}
+.tdoc .th .s{font-size:11.5px;color:#5a5f6b;line-height:1.6}
+.tdoc h4{text-align:center;font-size:16.5px;font-weight:750;letter-spacing:.4px;margin:16px 0 4px;color:#15171c}
+.tdoc .sub{text-align:center;font-size:12.5px;color:#5a5f6b;margin-bottom:14px}
+.tdoc .meta{font-size:12.5px;line-height:2;margin-bottom:12px;color:#15171c}
+.tdoc .meta i{font-style:normal;font-weight:680}
+.tdoc table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:12px;border-spacing:0}
+.tdoc col.c1,.tdoc col.c2{width:12%} .tdoc col.c3{width:15%} .tdoc col.c4{width:14%}
+.tdoc col.c5{width:17%} .tdoc col.c6{width:13%} .tdoc col.c7{width:17%}
+.tdoc th,.tdoc td{border:1px solid #8d94a3;padding:6px 7px;text-align:center;
+  color:#15171c!important;background:#fff!important;font-size:11.5px}
+.tdoc th{background:#e9ecf2!important;font-size:10.2px;font-weight:680;line-height:1.3;position:static;
+  text-transform:none!important;letter-spacing:0!important;white-space:normal!important;
+  word-break:normal;overflow-wrap:anywhere;vertical-align:middle}
+.tdoc td.num{text-align:right}
+.tdoc td.empty{color:#9aa0ad!important}
+.tdoc tr.tot td{background:#e9ecf2!important;font-weight:750}
+.tdoc .prilozi{font-size:12px;margin-top:16px;color:#15171c}
+.tdoc .prilozi .ln{border-bottom:1px dotted #8d94a3;height:19px;margin-top:8px}
+.tdoc .sig{display:flex;gap:22px;margin-top:30px;font-size:11.5px;color:#15171c}
+.tdoc .sig div{flex:1;text-align:center;border-top:1px solid #15171c;padding-top:6px}
+
 .print-only{display:none!important}
 @media print{
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
@@ -406,6 +434,10 @@ tbody tr.sumrow:hover{background:rgba(10,132,255,.14)!important}
   .legend,.cal-leg{font-size:8.4pt}
   a[href]:after{content:""}
   .rep-head{display:none!important}
+  .tdoc{border:none!important;padding:0!important;margin:0!important;background:#fff!important}
+  .tdoc + .tdoc{break-before:page}
+  .tdoc th,.tdoc td{padding:5px 6px;font-size:8.8pt}
+  .tdoc th{font-size:8pt}
 }
 #gate{position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;
   background:radial-gradient(900px 500px at 20% -10%,#12224a,transparent 60%),
@@ -519,6 +551,9 @@ pre.sql{background:var(--fill);border:1px solid var(--border);border-radius:10px
       <button data-s="notes">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 12h6M9 16h4"/></svg>
         Opaske</button>
+      <button data-s="trips">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h2M19 17h2"/><path d="M5 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0M15 17a2 2 0 1 0 4 0 2 2 0 1 0-4 0"/><path d="M9 17h6"/><path d="M3 17v-4l2-5h9l3 5h2a2 2 0 0 1 2 2v2"/><path d="M9 8v5"/></svg>
+        Putni troškovi</button>
       <button data-s="month">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M8 13h.01M12 13h.01M16 13h.01M8 17h.01M12 17h.01"/></svg>
         Mjesečni pregled</button>
@@ -663,6 +698,36 @@ pre.sql{background:var(--fill);border:1px solid var(--border);border-radius:10px
         </div>
         <div class="grid g4" id="nKpis" style="margin-bottom:18px"></div>
         <div id="nBody"></div>
+      </section>
+
+      <!-- ============ PUTNI TROŠKOVI (terenski dodatak) ============ -->
+      <section class="section" id="s-trips">
+        <div class="toolbar">
+          <div class="mstep">
+            <button onclick="shiftMonth('tpMonth',-1)" title="Prethodni mjesec">&#8249;</button>
+            <span class="lbl" id="tpMonthLbl"></span>
+            <button onclick="shiftMonth('tpMonth',1)" title="Sljedeći mjesec">&#8250;</button>
+            <button onclick="pickMonth('tpMonth')" title="Odaberi mjesec" style="padding:5px 8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;display:block"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></button>
+          </div>
+          <input class="f" type="month" id="tpMonth" style="width:0;height:0;padding:0;border:0;opacity:0;position:absolute">
+          <select class="f" id="tpWorker" style="width:220px"></select>
+          <div class="spacer"></div>
+          <button class="btn te" onclick="openTrip()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Novi putni nalog</button>
+          <button class="btn sec sm" onclick="tripsCSV()">CSV</button>
+          <button class="btn gr sm" onclick="tripsXLS()">Excel</button>
+          <button class="btn sec sm" onclick="printView()">Ispis / PDF</button>
+        </div>
+        <div class="grid g4" id="tpKpis" style="margin-bottom:18px"></div>
+        <div class="card no-print" id="tpTblCard">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h2M19 17h2"/><path d="M9 17h6"/><path d="M3 17v-4l2-5h9l3 5h2a2 2 0 0 1 2 2v2"/></svg>
+            <span id="tpTblTitle">Putni nalozi</span></h3>
+          <div class="tbl-wrap" id="tpTbl"></div>
+          <p class="hint" style="margin-top:10px">Broj dana se računa automatski — broje se i dan odlaska i dan povratka (17.08.–21.08. = 5 dana) — ali ga možeš ručno ispraviti. Svota = broj dana × dnevnica.</p>
+        </div>
+        <div id="tpDocs"></div>
+        <div id="tpYear" class="no-print"></div>
       </section>
 
       <!-- ============ MJESEČNI PREGLED ============ -->
@@ -813,6 +878,7 @@ pre.sql{background:var(--fill);border:1px solid var(--border);border-radius:10px
                 <input type="file" id="importInput" accept=".json,application/json" hidden>
                 <button class="btn sec" onclick="exportAllCSV()">Izvoz CSV (sve tablice)</button>
                 <button class="btn sec" onclick="allXLS()">Izvoz Excel (sve tablice)</button>
+                <button class="btn sec" onclick="openCleanup()">Očisti nepovezane zapise</button>
                 <button class="btn or" onclick="openWipe()">Obriši evidencije…</button>
                 <button class="btn rd" onclick="wipeAll()">Obriši sve podatke</button>
               </div>
@@ -882,7 +948,7 @@ pre.sql{background:var(--fill);border:1px solid var(--border);border-radius:10px
 
 const LS = 'crmpolic_v1';
 const APP = 'CRM POLIĆ';
-const VER = 'v4.1 · 05.09.2026.';
+const VER = 'v4.3 · 13.09.2026.';
 
 const DEF_CATS = [
   {code:'v01', name:'Papir i karton',                kljuc:'15 01 01', color:'#0a84ff', bale:true},
@@ -1035,9 +1101,12 @@ const SEED_NOTES_2 = [
    text:'Tretirana površina mikroorganizmima.'}
 ];
 
+/* Dnevnica za rad na terenu u RH — neoporezivi iznos po danu. */
+const TRIP_RATE = 30;
+
 const EMPTY_DB = () => ({
   company:{...DEF_COMPANY},
-  workers:[], time:[], waste:[], notes:[], tomb:[], cats:DEF_CATS.map(c=>({...c})),
+  workers:[], time:[], waste:[], notes:[], trips:[], tomb:[], cats:DEF_CATS.map(c=>({...c})),
   meta:{created:new Date().toISOString(), version:2}
 });
 
@@ -1096,6 +1165,10 @@ function holName(d){
 }
 
 /* ---------------- POHRANA ---------------- */
+function futureWarn(iso){
+  const max = new Date(Date.now() + 60*864e5).toISOString().slice(0,10);
+  if(iso && iso > max) toast('Upozorenje: datum ' + hrDate(iso) + ' je daleko u budućnosti — provjeri godinu.', 'err');
+}
 function tombIt(k, id){
   (db.tomb = db.tomb || []).push({k:k, id:String(id), _m:Date.now()});
   if(db.tomb.length > 800) db.tomb = db.tomb.slice(-500);
@@ -1129,6 +1202,12 @@ function migrate(o){
     if(!Array.isArray(n.workerIds)) n.workerIds = n.workerId ? [n.workerId] : [];
     delete n.workerId;
   });
+  d.trips   = Array.isArray(o.trips)  ? o.trips   : [];
+  d.trips.forEach(t => {
+    if(t.rate == null || !num(t.rate)) t.rate = TRIP_RATE;
+    if(t.days == null) t.days = tripDays(t.date, t.to);
+    if(t.ostalo == null) t.ostalo = 0;
+  });
   d.cats    = (Array.isArray(o.cats) && o.cats.length) ? o.cats : DEF_CATS.map(c=>({...c}));
   /* Ako podaci o tvrtki nisu upisani, popuni ih zadanima (i logo). */
   if(!d.company.naziv) Object.keys(DEF_COMPANY).forEach(k=>{ if(!d.company[k]) d.company[k] = DEF_COMPANY[k]; });
@@ -1136,7 +1215,7 @@ function migrate(o){
   /* Jednokratni unos zapisa iz radne bilježnice; nakon toga se više ne ponavlja. */
   d.tomb = Array.isArray(o.tomb) ? o.tomb : [];
   const t0 = Date.now();
-  ['workers','time','waste','notes','cats'].forEach(k => (d[k]||[]).forEach(r => { if(!r._m) r._m = t0; }));
+  ['workers','time','waste','notes','trips','cats'].forEach(k => (d[k]||[]).forEach(r => { if(!r._m) r._m = t0; }));
   if(!d.company._m) d.company._m = t0;
   d.meta = Object.assign({}, base.meta, o.meta || {});
   if(!d.meta.seedNotes1){
@@ -1164,6 +1243,15 @@ function migrate(o){
     if(!nk){ nk = {id:'w-nikola-vasic', name:'Nikola', role:'Vasić', oib:'', active:true}; d.workers.push(nk); }
     d.notes.forEach(x => { if(String(x.id).indexOf('seed') === 0) x.workerIds = [v.id, nk.id]; });
     d.meta.seedWorkers3 = true;
+  }
+  /* Jednokratno: brisanje probnih putnih naloga unesenih tijekom testiranja. */
+  if(!d.meta.resetTrips1){
+    (d.trips || []).forEach(x => {
+      if(!Array.isArray(d.tomb)) d.tomb = [];
+      d.tomb.push({k:'trips', id:x.id, _m:Date.now()});
+    });
+    d.trips = [];
+    d.meta.resetTrips1 = true;
   }
   /* Ispravak prezimena: Vacić -> Vasić */
   if(!d.meta.fixVasic){
@@ -1361,6 +1449,11 @@ function exportAllCSV(){
     const c = catOf(w.cat);
     rows.push([hrDate(w.date), c.code, c.name, c.kljuc||'', nn(w.kg,2), w.bale||0, w.note||'']);
   });
+  rows.push([], ['PUTNI TROŠKOVI — terenski dodatak'],
+    ['Datum odlaska','Datum povratka','Radnik','Mjesto troška','Svrha','Dana','Dnevnica','Dodatak','Ostali troškovi','Ukupno','Napomena']);
+  [...db.trips].sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(t=>rows.push([
+    hrDate(t.date), t.to?hrDate(t.to):'', workerLabel(workerOf(t.workerId)), t.mjesto||'', t.svrha||'',
+    nn(t.days,0), nn(t.rate||TRIP_RATE), nn(tripSum(t)), nn(t.ostalo), nn(tripTotal(t)), t.note||'']));
   download('CRM-Polic_sve-tablice_' + today() + '.csv', csv(rows), 'text/csv;charset=utf-8').then(ok => { if(ok) toast('CSV izvezen.'); });
 }
 function openWipe(){
@@ -1373,15 +1466,16 @@ function openWipe(){
     item('wp_time',  'Radno vrijeme',     db.time.length) +
     item('wp_waste', 'Evidencija otpada', db.waste.length) +
     item('wp_notes', 'Opaske',            db.notes.length) +
+    item('wp_trip',  'Putni troškovi',    db.trips.length) +
     item('wp_work',  'Radnici',           db.workers.length) +
     '<div class="modal-foot"><button class="btn sec" onclick="closeModal()">Odustani</button>' +
     '<button class="btn rd" onclick="runWipe()">Obriši označeno</button></div>');
 }
 function runWipe(){
   const t = $('#wp_time').checked, w = $('#wp_waste').checked,
-        n = $('#wp_notes').checked, k = $('#wp_work').checked;
-  if(!t && !w && !n && !k){ toast('Nije ništa označeno.', 'err'); return; }
-  const what = [t&&'radno vrijeme', w&&'evidencija otpada', n&&'opaske', k&&'radnici'].filter(Boolean).join(', ');
+        n = $('#wp_notes').checked, k = $('#wp_work').checked, p = $('#wp_trip').checked;
+  if(!t && !w && !n && !k && !p){ toast('Nije ništa označeno.', 'err'); return; }
+  const what = [t&&'radno vrijeme', w&&'evidencija otpada', n&&'opaske', p&&'putni troškovi', k&&'radnici'].filter(Boolean).join(', ');
   closeModal();
   confirmBox('Potvrda brisanja',
     'Briše se: <b>'+what+'</b>.<br>Radnja je nepovratna — preporuka je prvo napraviti izvoz podataka.',
@@ -1389,6 +1483,7 @@ function runWipe(){
       if(t){ db.time.forEach(x=>tombIt('time', x.id));   db.time  = []; }
       if(w){ db.waste.forEach(x=>tombIt('waste', x.id)); db.waste = []; }
       if(n){ db.notes.forEach(x=>tombIt('notes', x.id)); db.notes = []; }
+      if(p){ db.trips.forEach(x=>tombIt('trips', x.id)); db.trips = []; }
       if(k){ db.workers.forEach(x=>tombIt('workers', x.id)); db.workers = []; }
       save(); toast('Označene evidencije obrisane.'); go('dash');
     }, true);
@@ -1417,7 +1512,7 @@ $('#modalBg').addEventListener('click', e => { if(e.target.id === 'modalBg') clo
 document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 
 /* ---------------- NAVIGACIJA ---------------- */
-const TITLES = {dash:'Nadzorna ploča', time:'Radno vrijeme', notes:'Opaske', month:'Mjesečni pregled', waste:'Evidencija otpada',
+const TITLES = {dash:'Nadzorna ploča', time:'Radno vrijeme', notes:'Opaske', trips:'Putni troškovi', month:'Mjesečni pregled', waste:'Evidencija otpada',
                 workers:'Radnici', cats:'Vrste otpada', rep:'Izvještaji', set:'Postavke', help:'Upute'};
 let cur = 'dash';
 function go(s){
@@ -1930,7 +2025,7 @@ function saveNote(id){
   stamp(o);
   const i = db.notes.findIndex(x=>x.id===id);
   if(i>=0) db.notes[i] = o; else db.notes.push(o);
-  closeModal(); save(); toast('Opaska spremljena.');
+  closeModal(); save(); futureWarn(o.date); toast('Opaska spremljena.');
 }
 function delNote(id){
   confirmBox('Brisanje opaske', 'Obrisati ovu opasku?', ()=>{
@@ -1954,6 +2049,276 @@ function notesXLS(){
   const m = $('#nMonth').value;
   const book = xBook([ sheetNotes(rows, 'Opaske', coHead('Dnevnik rada — opaske', m ? monthLabel(m) : 'sva razdoblja')) ]);
   download('Opaske_' + (m || today()) + '.xlsx', book, XLSX_MIME)
+    .then(ok => { if(ok) toast('Excel datoteka spremljena.'); });
+}
+
+/* ---------------- PUTNI TROŠKOVI (obračun terenskog dodatka) ---------------- */
+/* Broj dana: broje se i dan odlaska i dan povratka (17.08.–21.08. = 5 dana).
+   Vrijednost se upisuje u zapis pa je korisnik može ručno ispraviti.          */
+function tripDays(from, to){
+  if(!from) return 0;
+  if(!to || to <= from) return 1;
+  const a = new Date(from + 'T00:00:00'), b = new Date(to + 'T00:00:00');
+  return Math.round((b - a) / 864e5) + 1;
+}
+function tripSum(t){ return num(t.days) * num(t.rate || TRIP_RATE); }
+function tripTotal(t){ return tripSum(t) + num(t.ostalo); }
+function tripsOf(m, w){
+  return db.trips
+    .filter(t => (!m || (t.date||'').startsWith(m)) && (!w || t.workerId === w))
+    .sort((a,b) => (a.date||'').localeCompare(b.date||''));
+}
+function tripField(rows, f, def){
+  const v = [...new Set(rows.map(t => (t[f]||'').trim()).filter(Boolean))];
+  return v.length ? v.join(' / ') : (def || '');
+}
+function lastTrip(){ return db.trips.slice().sort((a,b)=>num(a._m)-num(b._m)).pop(); }
+/* Prijedlozi u padajućem izborniku — sve što je ikad upisano, bez ponavljanja.
+   Novi unos se pamti automatski čim se putni nalog spremi.                    */
+function tripSuggest(f, extra){
+  const v = db.trips.map(t => (t[f]||'').trim()).concat(extra||[]).filter(Boolean);
+  return [...new Set(v)].sort((a,b)=>a.localeCompare(b,'hr'));
+}
+function tripList(id, f, extra){
+  return '<datalist id="'+id+'">' +
+    tripSuggest(f, extra).map(v=>'<option value="'+esc(v)+'">').join('') + '</datalist>';
+}
+
+function renderTrips(){
+  const m = $('#tpMonth').value || curMonth();
+  $('#tpMonthLbl').textContent = monthLabel(m);
+  const sw = $('#tpWorker'), kw = sw.value;
+  sw.innerHTML = '<option value="">Svi radnici</option>' +
+    db.workers.map(w=>'<option value="'+w.id+'">'+esc(workerLabel(w))+'</option>').join('');
+  sw.value = kw;
+
+  const rows = tripsOf(m, sw.value);
+  const dana = rows.reduce((a,t)=>a+num(t.days), 0);
+  const dod  = rows.reduce((a,t)=>a+tripSum(t), 0);
+  const ost  = rows.reduce((a,t)=>a+num(t.ostalo), 0);
+  $('#tpKpis').innerHTML =
+    kpi('t', IC.cal, 'Putnih naloga', rows.length, new Set(rows.map(t=>t.workerId)).size + ' radnika u mjesecu') +
+    kpi('',  IC.clk, 'Dana na terenu', fmt(dana), 'zbroj svih naloga') +
+    kpi('g', IC.avg, 'Terenski dodatak', fmt(dod,2) + ' €', 'dnevnica ' + fmt(TRIP_RATE,2) + ' € po danu') +
+    kpi('o', IC.usr, 'Ukupno za isplatu', fmt(dod + ost,2) + ' €', ost ? 'ostali troškovi ' + fmt(ost,2) + ' €' : 'bez ostalih troškova');
+
+  if(!rows.length){
+    $('#tpTbl').innerHTML = '<div class="empty">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h2M19 17h2"/><path d="M9 17h6"/><path d="M3 17v-4l2-5h9l3 5h2a2 2 0 0 1 2 2v2"/></svg>' +
+      'Nema putnih naloga za ' + esc(monthLabel(m)) + '</div>';
+    $('#tpDocs').innerHTML = '<div class="card"><div class="empty">Obrazac se popunjava čim uneseš prvi putni nalog</div></div>';
+    renderTripYear(m);
+    return;
+  }
+  $('#tpTbl').innerHTML =
+    '<table class="tsheet"><thead><tr>' +
+      '<th>Odlazak</th><th>Povratak</th><th>Radnik</th><th>Mjesto troška</th><th>Svrha</th>' +
+      '<th class="num">Dana</th><th class="num">Dnevnica</th><th class="num">Dodatak</th>' +
+      '<th class="num">Ostali tr.</th><th class="num">Ukupno</th><th></th></tr></thead><tbody>' +
+    rows.map(t=>'<tr>' +
+      '<td>'+hrDate(t.date)+'</td><td>'+(t.to?hrDate(t.to):'<span class="hint">—</span>')+'</td>' +
+      '<td>'+esc(workerLabel(workerOf(t.workerId)))+'</td>' +
+      '<td>'+esc(t.mjesto||'')+'</td><td>'+esc(t.svrha||'')+'</td>' +
+      '<td class="num">'+fmt(t.days)+'</td><td class="num">'+fmt(t.rate||TRIP_RATE,2)+'</td>' +
+      '<td class="num">'+fmt(tripSum(t),2)+'</td><td class="num">'+fmt(t.ostalo,2)+'</td>' +
+      '<td class="num"><b>'+fmt(tripTotal(t),2)+'</b></td>' +
+      '<td class="num no-print">'+rowBtns('Trip', t.id)+'</td></tr>').join('') +
+    '<tr class="sumrow"><td colspan="5"><b>UKUPNO — '+esc(monthLabel(m))+'</b></td>' +
+      '<td class="num"><b>'+fmt(dana)+'</b></td><td></td>' +
+      '<td class="num"><b>'+fmt(dod,2)+'</b></td><td class="num"><b>'+fmt(ost,2)+'</b></td>' +
+      '<td class="num"><b>'+fmt(dod+ost,2)+'</b></td><td></td></tr>' +
+    '</tbody></table>';
+
+  /* Obrazac — jedan po radniku, identičan papirnatom obrascu. */
+  const ids = [...new Set(rows.map(t=>t.workerId))];
+  $('#tpDocs').innerHTML = ids.map(id => tripDoc(m, id, rows.filter(t=>t.workerId===id))).join('');
+  renderTripYear(m);
+}
+
+function tripDoc(m, wid, rows){
+  const c = db.company, w = workerOf(wid);
+  const min = 6, pad = Math.max(0, min - rows.length);
+  let dod = 0, ost = 0;
+  const body = rows.map(t=>{
+    dod += tripSum(t); ost += num(t.ostalo);
+    return '<tr><td>'+hrDate(t.date).slice(0,6)+'</td><td>'+(t.to?hrDate(t.to).slice(0,6):'')+'</td>' +
+      '<td>'+fmt(t.days)+'</td><td class="num">'+fmt(t.rate||TRIP_RATE,2)+'</td>' +
+      '<td class="num">'+fmt(tripSum(t),2)+'</td><td class="num">'+(num(t.ostalo)?fmt(t.ostalo,2):'')+'</td>' +
+      '<td class="num">'+fmt(tripTotal(t),2)+'</td></tr>';
+  }).join('') +
+  Array.from({length:pad}).map(()=>'<tr><td>&nbsp;</td><td></td><td></td><td class="num empty">0,00</td>' +
+    '<td class="num empty">0,00</td><td class="num empty">0,00</td><td class="num empty">0,00</td></tr>').join('');
+
+  return '<div class="tdoc">' +
+    '<div class="th">' + (c.logo ? '<img src="'+c.logo+'" alt="">' : '') +
+      '<div><b>'+esc(c.naziv || APP)+'</b><div class="s">' +
+        esc([c.adresa, c.mjesto].filter(Boolean).join(', ')) +
+        (c.oib ? '<br>OIB: '+esc(c.oib) : '') + '</div></div></div>' +
+    '<h4>OBRAČUN TERENSKOG DODATKA</h4>' +
+    '<div class="sub">za mjesec '+esc(m.slice(5,7)+'.'+m.slice(0,4)+'.')+'</div>' +
+    '<div class="meta">' +
+      'Mjesto troška: <i>'+esc(tripField(rows,'mjesto'))+'</i><br>' +
+      'za radnika: <i>'+esc(workerLabel(w).toUpperCase())+'</i><br>' +
+      'koji je poslan u svrhu: <i>'+esc(tripField(rows,'svrha','—'))+'</i>' +
+    '</div>' +
+    '<table><colgroup><col class="c1"><col class="c2"><col class="c3"><col class="c4"><col class="c5"><col class="c6"><col class="c7"></colgroup><thead><tr>' +
+      '<th>1<br>Datum odlaska</th><th>2<br>Datum povratka</th><th>3<br>Broj dana provedenih na terenu</th>' +
+      '<th>4<br>Svota terenskog dodatka po danu</th><th>5<br>Ukupna svota terenskog dodatka (3x4)</th>' +
+      '<th>6<br>Svota ostalih troškova</th><th>7<br>Ukupno za isplatu (5+6)</th></tr></thead>' +
+      '<tbody>' + body +
+      '<tr class="tot"><td colspan="4">UKUPNO</td><td class="num">'+fmt(dod,2)+'</td>' +
+        '<td class="num">'+(ost?fmt(ost,2):'')+'</td><td class="num">'+fmt(dod+ost,2)+'</td></tr>' +
+      '</tbody></table>' +
+    '<div class="prilozi">Popis priloženih isprava za ostale troškove:<div class="ln"></div><div class="ln"></div></div>' +
+    '<div class="sig"><div>Odobrio</div><div>Kontrolirao</div><div>Potpis radnika</div></div>' +
+    '</div>';
+}
+
+/* Godišnji pregled po mjesecima — brz uvid i skok na mjesec. */
+function renderTripYear(m){
+  const y = m.slice(0,4);
+  const all = db.trips.filter(t => (t.date||'').startsWith(y));
+  if(!all.length){ $('#tpYear').innerHTML = ''; return; }
+  const cells = MJ.map((nm,i)=>{
+    const mm = y + '-' + String(i+1).padStart(2,'0');
+    const r  = all.filter(t => t.date.startsWith(mm));
+    const d  = r.reduce((a,t)=>a+num(t.days),0);
+    const s  = r.reduce((a,t)=>a+tripTotal(t),0);
+    return '<button class="btn '+(mm===m?'te':'sec')+' sm" style="flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;min-width:118px"' +
+      ' onclick="$(\'#tpMonth\').value=\''+mm+'\';renderTrips()">' +
+      '<span style="font-weight:640">'+nm.charAt(0).toUpperCase()+nm.slice(1)+'</span>' +
+      '<span class="hint" style="font-size:11px">'+(r.length? fmt(d)+' dana · '+fmt(s,2)+' €' : '—')+'</span></button>';
+  }).join('');
+  $('#tpYear').innerHTML = '<div class="card"><h3>' +
+    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>' +
+    'Godina '+y+'.</h3><div style="display:flex;flex-wrap:wrap;gap:8px">'+cells+'</div></div>';
+}
+
+function openTrip(id){
+  if(!db.workers.length){ toast('Prvo unesi radnika.', 'err'); return go('workers'); }
+  const prev = lastTrip() || {};
+  const m = $('#tpMonth').value || curMonth();
+  const t = db.trips.find(x=>x.id===id) ||
+    {id:'', date:(m === curMonth() ? today() : m + '-01'), to:'',
+     workerId:$('#tpWorker').value || db.workers[0].id,
+     mjesto:prev.mjesto || '', svrha:prev.svrha || '',
+     rate:TRIP_RATE, days:1, ostalo:0, note:''};
+  modal('<h3>'+(id?'Uređivanje putnog naloga':'Novi putni nalog')+'</h3>' +
+    '<div class="row"><div class="fld"><label class="f">Datum odlaska</label>' +
+      '<input class="f" type="date" id="tp_from" value="'+t.date+'" oninput="tpCalc()"></div>' +
+    '<div class="fld"><label class="f">Datum povratka</label>' +
+      '<input class="f" type="date" id="tp_to" value="'+(t.to||'')+'" oninput="tpCalc()"></div></div>' +
+    '<div class="fld"><label class="f">Radnik</label><select class="f" id="tp_worker">' +
+      db.workers.map(w=>'<option value="'+w.id+'"'+(w.id===t.workerId?' selected':'')+'>'+esc(workerLabel(w))+'</option>').join('') +
+    '</select></div>' +
+    '<div class="row"><div class="fld"><label class="f">Mjesto troška</label>' +
+      '<input class="f" id="tp_mjesto" list="tp_mjesta" autocomplete="off" value="'+esc(t.mjesto)+'" placeholder="npr. Novalja, Pag">' +
+      tripList('tp_mjesta', 'mjesto') + '</div>' +
+    '<div class="fld"><label class="f">Svrha puta</label>' +
+      '<input class="f" id="tp_svrha" list="tp_svrhe" autocomplete="off" value="'+esc(t.svrha)+'" placeholder="npr. Kontrola rada postrojenja">' +
+      tripList('tp_svrhe', 'svrha') + '</div></div>' +
+    '<div class="row"><div class="fld"><label class="f">Broj dana na terenu</label>' +
+      '<input class="f" type="number" id="tp_days" min="0" step="1" value="'+num(t.days)+'" oninput="tpCalc(1)"></div>' +
+    '<div class="fld"><label class="f">Dnevnica (€ po danu)</label>' +
+      '<input class="f" type="number" id="tp_rate" min="0" step="0.01" value="'+num(t.rate||TRIP_RATE)+'" oninput="tpCalc(1)"></div></div>' +
+    '<div class="row"><div class="fld"><label class="f">Ostali troškovi (€)</label>' +
+      '<input class="f" type="number" id="tp_ost" min="0" step="0.01" value="'+num(t.ostalo)+'" oninput="tpCalc(1)"></div>' +
+    '<div class="fld"><label class="f">Ukupno za isplatu</label>' +
+      '<input class="f" id="tp_tot" readonly style="font-weight:700"></div></div>' +
+    '<div class="fld"><label class="f">Napomena (npr. priložene isprave)</label>' +
+      '<input class="f" id="tp_note" list="tp_note_l" autocomplete="off" value="'+esc(t.note||'')+'" placeholder="npr. račun za gorivo i cestarinu">' +
+      tripList('tp_note_l', 'note') + '</div>' +
+    '<p class="hint" id="tp_hint" style="margin-top:2px"></p>' +
+    '<div class="modal-foot"><button class="btn sec" onclick="closeModal()">Odustani</button>' +
+    '<button class="btn te" onclick="saveTrip(\''+(id||'')+'\')">Spremi</button></div>');
+  tpCalc(id ? 1 : 0);
+}
+/* manual=1 → ne diramo ručno upisan broj dana, samo preračunamo svote */
+function tpCalc(manual){
+  const f = $('#tp_from').value, to = $('#tp_to').value;
+  if(!manual && f) $('#tp_days').value = tripDays(f, to);
+  const d = num($('#tp_days').value), r = num($('#tp_rate').value), o = num($('#tp_ost').value);
+  $('#tp_tot').value = fmt(d*r + o, 2) + ' €';
+  $('#tp_hint').innerHTML = 'Terenski dodatak: <b>' + fmt(d,0) + ' × ' + fmt(r,2) + ' € = ' + fmt(d*r,2) + ' €</b>' +
+    (o ? ' · ostali troškovi ' + fmt(o,2) + ' €' : '');
+}
+function saveTrip(id){
+  const o = {id:id||uid(), date:$('#tp_from').value, to:$('#tp_to').value,
+             workerId:$('#tp_worker').value, mjesto:$('#tp_mjesto').value.trim(),
+             svrha:$('#tp_svrha').value.trim(), days:num($('#tp_days').value),
+             rate:num($('#tp_rate').value) || TRIP_RATE, ostalo:num($('#tp_ost').value),
+             note:$('#tp_note').value.trim()};
+  if(!o.date){ toast('Datum odlaska je obavezan.', 'err'); return; }
+  if(o.to && o.to < o.date){ toast('Datum povratka je prije datuma odlaska.', 'err'); return; }
+  if(o.days <= 0){ toast('Broj dana mora biti veći od nule.', 'err'); return; }
+  stamp(o);
+  const i = db.trips.findIndex(x=>x.id===id);
+  if(i>=0) db.trips[i] = o; else db.trips.push(o);
+  $('#tpMonth').value = o.date.slice(0,7);
+  closeModal(); save(); futureWarn(o.date); toast('Putni nalog spremljen.');
+}
+function delTrip(id){
+  confirmBox('Brisanje putnog naloga', 'Obrisati ovaj putni nalog?', ()=>{
+    db.trips = db.trips.filter(x=>x.id!==id); tombIt('trips', id); save(); toast('Putni nalog obrisan.');
+  }, true);
+}
+function tripsCSV(){
+  const m = $('#tpMonth').value, rows = tripsOf(m, $('#tpWorker').value);
+  if(!rows.length){ toast('Nema putnih naloga za izvoz.', 'err'); return; }
+  const out = [['Datum odlaska','Datum povratka','Radnik','Mjesto troška','Svrha',
+                'Broj dana','Dnevnica','Terenski dodatak','Ostali troškovi','Ukupno za isplatu','Napomena']];
+  rows.forEach(t => out.push([hrDate(t.date), t.to?hrDate(t.to):'', workerLabel(workerOf(t.workerId)),
+    t.mjesto||'', t.svrha||'', nn(t.days,0), nn(t.rate||TRIP_RATE), nn(tripSum(t)), nn(t.ostalo),
+    nn(tripTotal(t)), t.note||'']));
+  out.push(['UKUPNO','','','','', nn(rows.reduce((a,t)=>a+num(t.days),0),0), '',
+            nn(rows.reduce((a,t)=>a+tripSum(t),0)), nn(rows.reduce((a,t)=>a+num(t.ostalo),0)),
+            nn(rows.reduce((a,t)=>a+tripTotal(t),0)), '']);
+  download('Putni-troskovi_' + (m || today()) + '.csv', csv(out), 'text/csv;charset=utf-8')
+    .then(ok => { if(ok) toast('CSV spremljen.'); });
+}
+/* Excel — po jedan list za svakog radnika, u obliku papirnatog obrasca. */
+function sheetTrip(m, wid, rows){
+  const c = db.company, w = workerOf(wid);
+  const out = [
+    xSpan(c.naziv || APP, 't', 7),
+    xSpan([c.adresa, c.mjesto].filter(Boolean).join(', ') + (c.oib ? ' · OIB: '+c.oib : ''), 's', 7),
+    xR([]),
+    xSpan('OBRAČUN TERENSKOG DODATKA', 't', 7),
+    xSpan('za mjesec ' + m.slice(5,7) + '.' + m.slice(0,4) + '.', 's', 7),
+    xR([]),
+    xR([xC('Mjesto troška:', 'b'), xC(tripField(rows,'mjesto'))]),
+    xR([xC('za radnika:', 'b'),    xC(workerLabel(w).toUpperCase())]),
+    xR([xC('koji je poslan u svrhu:', 'b'), xC(tripField(rows,'svrha','—'))]),
+    xR([]),
+    xR([xC('1\nDatum odlaska','h'), xC('2\nDatum povratka','h'), xC('3\nBroj dana provedenih na terenu','h'),
+        xC('4\nSvota terenskog dodatka po danu','h'), xC('5\nUkupna svota terenskog dodatka (3x4)','h'),
+        xC('6\nSvota ostalih troškova','h'), xC('7\nUkupno za isplatu (5+6)','h')])
+  ];
+  let dod = 0, ost = 0;
+  rows.forEach(t=>{
+    dod += tripSum(t); ost += num(t.ostalo);
+    out.push(xR([xC(hrDate(t.date)), xC(t.to?hrDate(t.to):''), xC(num(t.days),'i'),
+                 xC(num(t.rate||TRIP_RATE),'n'), xC(tripSum(t),'n'), xC(num(t.ostalo),'n'), xC(tripTotal(t),'n')]));
+  });
+  out.push(xR([xC('UKUPNO','tt'), xC('','tt'), xC(rows.reduce((a,t)=>a+num(t.days),0),'ti'), xC('','tt'),
+               xC(dod,'tn'), xC(ost,'tn'), xC(dod+ost,'tn')]));
+  const nap = rows.filter(t=>t.note);
+  if(nap.length){
+    out.push(xR([]));
+    out.push(xR([xC('Popis priloženih isprava za ostale troškove:','b')]));
+    nap.forEach(t => out.push(xR([xC(hrDate(t.date)), xC(t.note)])));
+  }
+  out.push(xR([]));
+  out.push(xR([xC('Odobrio:','b'), xC(''), xC('Kontrolirao:','b'), xC(''), xC('Potpis radnika:','b')]));
+  return xSheet(workerLabel(w) || 'Radnik', [110,110,110,110,120,110,120], out);
+}
+function tripsXLS(){
+  const m = $('#tpMonth').value || curMonth();
+  const rows = tripsOf(m, $('#tpWorker').value);
+  if(!rows.length){ toast('Nema putnih naloga za izvoz.', 'err'); return; }
+  const ids = [...new Set(rows.map(t=>t.workerId))];
+  const book = xBook(ids.map(id => sheetTrip(m, id, rows.filter(t=>t.workerId===id))));
+  download('Terenski-dodatak_' + m + '.xlsx', book, XLSX_MIME)
     .then(ok => { if(ok) toast('Excel datoteka spremljena.'); });
 }
 
@@ -2065,7 +2430,7 @@ function saveTime(id){
   stamp(o);
   const i = db.time.findIndex(x=>x.id===id);
   if(i>=0) db.time[i] = o; else db.time.push(o);
-  closeModal(); save(); toast('Zapis spremljen.');
+  closeModal(); save(); futureWarn(o.date); toast('Zapis spremljen.');
 }
 function delTime(id){
   confirmBox('Brisanje zapisa', 'Obrisati ovaj zapis radnog vremena?', ()=>{
@@ -2173,7 +2538,7 @@ function saveWaste(id){
   stamp(o);
   const i = db.waste.findIndex(x=>x.id===id);
   if(i>=0) db.waste[i] = o; else db.waste.push(o);
-  closeModal(); save(); toast('Zapis spremljen.');
+  closeModal(); save(); futureWarn(o.date); toast('Zapis spremljen.');
 }
 function delWaste(id){
   confirmBox('Brisanje zapisa', 'Obrisati ovaj zapis o otpadu?', ()=>{
@@ -2432,6 +2797,16 @@ function renderHelp(){
 
   '<div class="card"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 10v10"/></svg>Razmjena podataka s kolegom</h3>' +
   '<p class="hint">Svatko radi na svojoj kopiji. Ako želiš prenijeti podatke: pošalji <b>izvezeni JSON</b>, a druga strana ga učita preko <b>Postavke → Uvoz podataka</b>. Uvoz zamjenjuje sve postojeće podatke, pa prije uvoza napravi vlastiti izvoz.</p></div></div>' +
+
+  '<div class="card"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h2M19 17h2"/><path d="M9 17h6"/><path d="M3 17v-4l2-5h9l3 5h2a2 2 0 0 1 2 2v2"/></svg>Putni troškovi — terenski dodatak</h3>' +
+  '<ul class="hint" style="padding-left:18px;line-height:2">' +
+  '<li>Klikni <b>Novi putni nalog</b> i upiši datum odlaska i povratka. Broj dana se izračuna sam — <b>broje se i dan odlaska i dan povratka</b> (npr. 17.08.–21.08. = 5 dana). Ako kod nekog puta treba drugačije, broj dana slobodno prepiši ručno.</li>' +
+  '<li><b>Mjesto troška</b>, <b>svrha</b> i <b>napomena</b> pamte sve što je ikad upisano — klikom na polje otvara se padajući popis prijašnjih unosa, a svaki novi unos se doda sam od sebe.</li>' +
+  '<li>Dnevnica je unaprijed postavljena na <b>' + fmt(TRIP_RATE,2) + ' €</b> (neoporezivi iznos za rad na terenu u RH), a svota se računa kao <b>dani × dnevnica</b>. Dnevnicu možeš promijeniti na svakom nalogu.</li>' +
+  '<li>U polje <b>Ostali troškovi</b> upiši gorivo, cestarinu, smještaj i slično; napomena služi za popis priloženih računa.</li>' +
+  '<li>Ispod tablice se sam popunjava <b>obrazac Obračun terenskog dodatka</b>, po jedan za svakog radnika u mjesecu — spreman za potpis. Gumb <b>Ispis / PDF</b> ga ispisuje ili sprema kao PDF.</li>' +
+  '<li><b>Excel</b> daje isti obrazac po listovima (jedan list po radniku), <b>CSV</b> daje tablicu za daljnju obradu. Godišnja traka na dnu prikazuje sve mjesece i služi za brzi skok.</li>' +
+  '</ul></div>' +
 
   '<div class="card"><h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Ako nešto zapne</h3>' +
   '<ul class="hint" style="padding-left:18px;line-height:2">' +
@@ -2742,6 +3117,22 @@ function sheetNotes(rows, name, head){
   return xSheet(name || 'Opaske', [70,45,150,130,520], out, head);
 }
 
+function sheetTripsAll(){
+  const out = [xR([xC('Datum odlaska','h'), xC('Datum povratka','h'), xC('Radnik','h'), xC('Mjesto troška','h'),
+                   xC('Svrha','h'), xC('Dana','h'), xC('Dnevnica','h'), xC('Terenski dodatak','h'),
+                   xC('Ostali troškovi','h'), xC('Ukupno za isplatu','h'), xC('Napomena','h')])];
+  let d = 0, s = 0, o = 0;
+  [...db.trips].sort((a,b)=>String(a.date).localeCompare(String(b.date))).forEach(t=>{
+    d += num(t.days); s += tripSum(t); o += num(t.ostalo);
+    out.push(xR([xC(hrDate(t.date)), xC(t.to?hrDate(t.to):''), xC(workerLabel(workerOf(t.workerId))),
+                 xC(t.mjesto||''), xC(t.svrha||''), xC(num(t.days),'i'), xC(num(t.rate||TRIP_RATE),'n'),
+                 xC(tripSum(t),'n'), xC(num(t.ostalo),'n'), xC(tripTotal(t),'n'), xC(t.note||'')]));
+  });
+  out.push(xR([xC('UKUPNO','tt'), xC('','tt'), xC('','tt'), xC('','tt'), xC('','tt'), xC(d,'ti'), xC('','tt'),
+               xC(s,'tn'), xC(o,'tn'), xC(s+o,'tn'), xC('','tt')]));
+  return xSheet('Putni troškovi', [85,85,140,130,180,50,70,100,90,110,180], out);
+}
+
 /* Izvoz iz kartica Radno vrijeme / Evidencija otpada */
 function tableXLS(what){
   const rows  = what === 'time' ? filteredTime() : filteredWaste();
@@ -2809,6 +3200,7 @@ function allXLS(){
     sheetWaste(db.waste, 'Otpad'),
     sheetTime(db.time, 'Radno vrijeme'),
     sheetNotes(db.notes, 'Opaske'),
+    sheetTripsAll(),
     sheetWorkers(),
     sheetCats()
   ]);
@@ -2932,6 +3324,7 @@ function openDownloads(){
          "tableXLS('time')", "exportCSV('time')") +
     item('Mjesečni izvještaj', 'Razdoblje: ' + lab(mR) + ' · sažetak + detalji', 'repXLS()', 'repCSV()') +
     item('Opaske', 'Dnevnik rada · ' + lab($('#nMonth').value), 'notesXLS()', 'notesCSV()') +
+    item('Putni troškovi', 'Obračun terenskog dodatka · ' + lab($('#tpMonth').value), 'tripsXLS()', 'tripsCSV()') +
     item('Sve tablice', 'Otpad, radno vrijeme, opaske, radnici i vrste', 'allXLS()', 'exportAllCSV()') +
     '<div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)">' +
       '<div style="flex:1"><div style="font-weight:600;font-size:13.5px">Ispis ili PDF</div>' +
@@ -2966,7 +3359,7 @@ function cloudStatus(state, txt){
   if(t1) t1.textContent = txt;
   if(t2) t2.textContent = 'Oblak: ' + txt.toLowerCase();
 }
-const KINDS = ['workers','time','waste','notes','cats'];
+const KINDS = ['workers','time','waste','notes','trips','cats'];
 const KEYOF = {cats:'code'};
 function recKey(k, r){ return String(r[KEYOF[k] || 'id']); }
 function stamp(o){ o._m = Date.now(); return o; }
@@ -3136,6 +3529,100 @@ function gateTry(){
 function gateSkip(){ $('#gate').classList.remove('on'); cloudStatus('','Nije povezano'); }
 document.addEventListener('keydown', e => { if(e.key === 'Enter' && $('#gate').classList.contains('on')) gateTry(); });
 
+/* ---------------- NEPOVEZANI ZAPISI (obrisani radnici) ---------------- */
+function findOrphans(){
+  const ids = new Set(db.workers.map(w => w.id));
+  return {
+    t: db.time.filter(x => !ids.has(x.workerId)),
+    n: db.notes.filter(x => (x.workerIds || []).some(i => !ids.has(i))),
+    p: db.trips.filter(x => !ids.has(x.workerId)),
+    ids: ids
+  };
+}
+function suspectDates(){
+  const max = new Date(Date.now() + 60*864e5).toISOString().slice(0,10);   /* dalje od 60 dana unaprijed */
+  const min = '2020-01-01';
+  const out = [];
+  const bad = d => !d || d > max || d < min;
+  db.time.forEach(x  => { if(bad(x.date)) out.push({k:'Time',  vrsta:'Radno vrijeme', id:x.id, date:x.date,
+                          opis: workerLabel(workerOf(x.workerId)) + ' · ' + fmt(x.hours,1) + ' h'}); });
+  db.waste.forEach(x => { if(bad(x.date)) out.push({k:'Waste', vrsta:'Otpad', id:x.id, date:x.date,
+                          opis: catOf(x.cat).name + ' · ' + fmt(x.kg) + ' kg'}); });
+  db.notes.forEach(x  => { if(bad(x.date)) out.push({k:'Note',  vrsta:'Opaska', id:x.id, date:x.date,
+                          opis: (x.text||'').replace(/\n/g,' ').slice(0,50)}); });
+  db.trips.forEach(x  => { if(bad(x.date) || (x.to && bad(x.to))) out.push({k:'Trip', vrsta:'Putni trošak', id:x.id, date:x.date,
+                          opis: workerLabel(workerOf(x.workerId)) + ' · ' + fmt(x.days) + ' dana'}); });
+  return out.sort((a,b) => String(a.date).localeCompare(String(b.date)));
+}
+function openCleanup(){
+  const o = findOrphans();
+  const d = suspectDates();
+  if(!o.t.length && !o.n.length && !o.p.length && !d.length){ toast('Nema nepovezanih zapisa ni sumnjivih datuma.'); return; }
+  const h = o.t.reduce((a, b) => a + num(b.hours), 0);
+  let html = '<h3>Provjera podataka</h3>';
+
+  if(o.t.length || o.n.length || o.p.length){
+    html += '<p class="hint" style="margin-bottom:12px"><b>Nepovezani zapisi</b> — vezani su uz radnika kojeg više nema u šifrarniku, pa se u grafovima prikazuju kao <b>(obrisan radnik)</b>.</p>' +
+      '<div class="card" style="margin-bottom:14px;padding:13px 15px"><div style="display:flex;gap:26px;flex-wrap:wrap">' +
+        '<div><div class="hint">Radno vrijeme</div><b style="font-size:19px">' + o.t.length + '</b> ' +
+          '<span class="hint">zapisa · ' + fmt(h,1) + ' h</span></div>' +
+        '<div><div class="hint">Opaske</div><b style="font-size:19px">' + o.n.length + '</b> <span class="hint">zapisa</span></div>' +
+        '<div><div class="hint">Putni troškovi</div><b style="font-size:19px">' + o.p.length + '</b> <span class="hint">naloga</span></div>' +
+      '</div></div>' +
+      '<div class="fld"><label class="f">Što učiniti s njima</label><select class="f" id="cl_to">' +
+        '<option value="">Obriši ih</option>' +
+        db.workers.map(w => '<option value="' + w.id + '">Prebaci na: ' + esc(workerLabel(w)) + '</option>').join('') +
+      '</select></div>' +
+      '<div style="display:flex;justify-content:flex-end;margin-bottom:18px">' +
+        '<button class="btn rd sm" onclick="runCleanup()">Riješi nepovezane zapise</button></div>';
+  }
+
+  if(d.length){
+    html += '<p class="hint" style="margin-bottom:10px"><b>Sumnjivi datumi</b> — zapisi s godinom koja izlazi iz očekivanog razdoblja. Najčešće je riječ o omašci pri unosu.</p>' +
+      '<div class="tbl-wrap" style="margin-bottom:8px"><table><thead><tr><th>Datum</th><th>Vrsta</th><th>Opis</th><th></th></tr></thead><tbody>' +
+      d.map(x => '<tr><td style="color:var(--red);font-weight:640">' + hrDate(x.date) + '</td>' +
+        '<td>' + x.vrsta + '</td><td class="hint">' + esc(x.opis) + '</td>' +
+        '<td class="num"><button class="btn sec ic" title="Ispravi" onclick="closeModal();open' + x.k + '(\'' + x.id + '\')">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>' +
+        '</button></td></tr>').join('') + '</tbody></table></div>';
+  }
+
+  html += '<div class="modal-foot"><button class="btn sec" onclick="closeModal()">Zatvori</button></div>';
+  modal(html);
+}
+function runCleanup(){
+  const sel = $('#cl_to');
+  const to = sel ? sel.value : '';
+  const o = findOrphans();
+  closeModal();
+  const opis = to ? ('prebaciti na <b>' + esc(workerLabel(workerOf(to))) + '</b>') : '<b>trajno obrisati</b>';
+  confirmBox('Potvrda',
+    (o.t.length + o.n.length + o.p.length) + ' zapisa bit će ' + opis + '.<br>Promjena se prenosi i na ostale uređaje.',
+    () => {
+      if(to){
+        o.t.forEach(x => { x.workerId = to; stamp(x); });
+        o.p.forEach(x => { x.workerId = to; stamp(x); });
+        o.n.forEach(x => {
+          x.workerIds = [...new Set((x.workerIds || []).map(i => o.ids.has(i) ? i : to))];
+          stamp(x);
+        });
+      } else {
+        o.t.forEach(x => tombIt('time', x.id));
+        db.time = db.time.filter(x => o.ids.has(x.workerId));
+        o.p.forEach(x => tombIt('trips', x.id));
+        db.trips = db.trips.filter(x => o.ids.has(x.workerId));
+        o.n.forEach(x => {
+          x.workerIds = (x.workerIds || []).filter(i => o.ids.has(i));
+          if(!x.workerIds.length){ tombIt('notes', x.id); x._del = 1; } else stamp(x);
+        });
+        db.notes = db.notes.filter(x => !x._del);
+      }
+      save();
+      toast(to ? 'Zapisi prebačeni.' : 'Nepovezani zapisi obrisani.');
+      go('dash');
+    }, !to);
+}
+
 /* ---------------- ISPIS / PDF ---------------- */
 function printSubtitle(){
   const lab = m => m ? monthLabel(m) : 'sva razdoblja';
@@ -3149,6 +3636,10 @@ function printSubtitle(){
     const w = $('#nWorker').value, c = $('#nCat').value;
     return lab($('#nMonth').value) + (w ? ' · ' + workerLabel(workerOf(w)) : '') +
            (c ? ' · ' + NCAT[c].n : '');
+  }
+  if(cur === 'trips'){
+    const w = $('#tpWorker').value;
+    return lab($('#tpMonth').value) + (w ? ' · ' + workerLabel(workerOf(w)) : ' · svi radnici');
   }
   if(cur === 'rep')    return lab($('#repMonth').value);
   if(cur === 'waste'){
@@ -3184,6 +3675,7 @@ function refreshAll(){
   if(cur==='time')    renderTime();
   if(cur==='month')   renderMonth();
   if(cur==='notes')   renderNotes();
+  if(cur==='trips')   renderTrips();
   if(cur==='waste')   renderWaste();
   if(cur==='workers') renderWorkers();
   if(cur==='cats')    renderCats();
@@ -3205,8 +3697,10 @@ $('#connectBtn2').onclick = fsConnect;
 $('#repMonth').addEventListener('change', renderRep);
 $('#mMonth').addEventListener('change', renderMonth);
 ['#nMonth','#nWorker','#nCat'].forEach(x => $(x).addEventListener('change', renderNotes));
+['#tpMonth','#tpWorker'].forEach(x => $(x).addEventListener('change', renderTrips));
 $('#nSearch').addEventListener('input', renderNotes);
 window.addEventListener('resize', ()=>{ if(cur==='dash') renderDash(); });
+
 
 (function init(){
   const th = localStorage.getItem(LS + '_theme');
@@ -3223,6 +3717,7 @@ window.addEventListener('resize', ()=>{ if(cur==='dash') renderDash(); });
   $('#repMonth').value   = curMonth();
   $('#mMonth').value     = curMonth();
   $('#nMonth').value     = curMonth();
+  $('#tpMonth').value    = curMonth();
   const d = new Date();
   $('#todayTxt').textContent = DN[d.getDay()] + ', ' + d.getDate() + '. ' + MJ[d.getMonth()] + ' ' + d.getFullYear() + '.';
   $('#verTxt').textContent = VER;
